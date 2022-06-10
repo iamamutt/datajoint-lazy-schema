@@ -1,0 +1,272 @@
+{
+	"extensions": {
+		"recommendations": [
+			"aaron-bond.better-comments",
+			"analytic-signal.snippets-plotly",
+			"bierner.github-markdown-preview",
+			"christian-kohler.path-intellisense",
+			"eamodio.gitlens",
+			"foxundermoon.shell-format",
+			"GitHub.vscode-pull-request-github",
+			"Gruntfuggly.todo-tree",
+			"johnpapa.vscode-peacock",
+			"kevinrose.vsc-python-indent",
+			"mechatroner.rainbow-csv",
+			"mikestead.dotenv",
+			"ms-azuretools.vscode-docker",
+			"ms-python.python",
+			"ms-python.vscode-pylance",
+			"ms-toolsai.jupyter",
+			"ms-vscode-remote.remote-ssh-edit",
+			"ms-vscode-remote.vscode-remote-extensionpack",
+			"ms-vscode.live-server",
+			"ms-vscode.vscode-typescript-tslint-plugin",
+			"njpwerner.autodocstring",
+			"redhat.vscode-yaml",
+			"tamasfe.even-better-toml",
+			"timonwong.shellcheck",
+			"VisualStudioExptTeam.intellicode-api-usage-examples",
+			"VisualStudioExptTeam.vscodeintellicode",
+			"vivaxy.vscode-conventional-commits",
+			"yzhang.markdown-all-in-one"
+		]
+	},
+	"folders": [
+		{
+			"name": "datajoint-lazy-schema",
+			"path": "."
+		}
+	],
+	"settings": {
+		"[python]": {
+			"editor.formatOnSave": true
+		},
+		"autoDocstring.customTemplatePath": "configs/docstrings.mustache",
+		"autoDocstring.docstringFormat": "google",
+		"autoDocstring.generateDocstringOnEnter": true,
+		"autoDocstring.guessTypes": true,
+		"autoDocstring.startOnNewLine": false,
+		"conventionalCommits.scopes": [
+			"pipeline",
+			"actions",
+			"loaders",
+			"package",
+			"module",
+			"docker",
+			"vscode"
+		],
+		"mypythongpkg.condaExec": "mamba",
+		"files.exclude": {
+			".mypy_cache": true,
+			".nox": true,
+			".pytest_cache": true,
+			"*.command": true,
+			"**/__pycache__": true,
+			"**/.DS_Store": true,
+			"**/.git": true,
+			"**/.hg": true,
+			"**/.ipynb_checkpoints": true,
+			"**/.svn": true,
+			"**/*.egg-info": true,
+			"**/CVS": true,
+			"**/Thumbs.db": true,
+			"build": true
+		},
+		"jupyter.alwaysScrollOnNewCell": true,
+		"jupyter.generateSVGPlots": true,
+		"jupyter.interactiveWindowMode": "single",
+		"jupyter.notebookFileRoot": "${workspaceFolder}",
+		"jupyter.sendSelectionToInteractiveWindow": true,
+		"jupyter.themeMatplotlibPlots": true,
+		"python.analysis.completeFunctionParens": true,
+		"python.analysis.diagnosticMode": "workspace",
+		"python.analysis.diagnosticSeverityOverrides": {
+			"reportGeneralTypeIssues": "none"
+		},
+		"python.analysis.typeCheckingMode": "basic",
+		"python.defaultInterpreterPath": "${env:CONDA_ENV_ROOT}/datajoint-lazy-schema",
+		"python.formatting.blackArgs": [
+			"--line-length=88"
+		],
+		"python.formatting.provider": "black",
+		"python.languageServer": "Pylance",
+		"python.linting.flake8Args": [
+			"--max-line-length=88",
+			"--extend-ignore=E203"
+		],
+		"python.linting.flake8Enabled": true,
+		"python.linting.mypyCategorySeverity.error": "Hint",
+		"python.linting.mypyEnabled": true,
+		"python.sortImports.args": [
+			"--profile=black"
+		],
+		"python.terminal.activateEnvInCurrentTerminal": true,
+		"python.testing.pytestEnabled": true
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Python: Current File",
+				"type": "python",
+				"program": "${file}",
+				"console": "integratedTerminal",
+				"cwd": "${workspaceFolder}",
+				"env": {
+					"PYTHONPATH": "${workspaceFolder}/src"
+				},
+				"request": "launch",
+				"justMyCode": false
+			},
+		]
+	},
+	"tasks": {
+		// See https://go.microsoft.com/fwlink/?LinkId=733558
+		// for the documentation about the tasks.json format
+		"version": "2.0.0",
+		"options": {
+			"cwd": "${workspaceFolder}"
+		},
+		"presentation": {
+			"group": "package",
+			"clear": false,
+			"echo": true,
+			"focus": true,
+			"panel": "shared",
+			"reveal": "always",
+			"showReuseMessage": true
+		},
+		"tasks": [
+			{
+				"label": "show recommended extensions",
+				"command": "${command:workbench.extensions.action.showRecommendedExtensions}"
+			},
+			{
+				"label": "clean junk files",
+				"type": "shell",
+				"command": "find . -name '*.DS_Store' -type f -delete && find . -name '.ipynb_checkpoints' -type d -exec rm -rf {} + && find . -name '__pycache__' -type d -exec rm -rf {} +"
+			},
+			{
+				"label": "conda install: environment.yml",
+				"type": "shell",
+				"command": "conda",
+				"args": [
+					"run",
+					"--no-capture-output",
+					"-n",
+					"base",
+					"${config:mypythongpkg.condaExec}",
+					"env",
+					"create",
+					"-vq",
+					"--file",
+					"environment.yml",
+					"--force",
+					"--no-default-packages"
+				]
+			},
+			{
+				"label": "conda prune: environment.yml",
+				"type": "shell",
+				"command": "${config:mypythongpkg.condaExec}",
+				"args": [
+					"env",
+					"update",
+					"-vq",
+					"--file",
+					"environment.yml",
+					"--prune"
+				]
+			},
+			{
+				"label": "conda update: all packages",
+				"type": "shell",
+				"command": "conda",
+				"args": [
+					"run",
+					"--no-capture-output",
+					"-n",
+					"datajoint-lazy-schema",
+					"${config:mypythongpkg.condaExec}",
+					"update",
+					"-qy",
+					"--all"
+				]
+			},
+			{
+				"label": "conda remove: env",
+				"type": "shell",
+				"command": "conda",
+				"args": [
+					"run",
+					"--no-capture-output",
+					"-n",
+					"base",
+					"${config:mypythongpkg.condaExec}",
+					"env",
+					"remove",
+					"-n",
+					"datajoint-lazy-schema"
+				]
+			},
+			{
+				"label": "conda list",
+				"type": "shell",
+				"command": "conda",
+				"args": [
+					"run",
+					"--no-capture-output",
+					"-n",
+					"datajoint-lazy-schema",
+					"${config:mypythongpkg.condaExec}",
+					"list"
+				],
+				"presentation": {
+					"group": "conda"
+				}
+			},
+			{
+				"label": "pip install: dev package",
+				"type": "shell",
+				"command": "conda",
+				"args": [
+					"run",
+					"--no-capture-output",
+					"-n",
+					"datajoint-lazy-schema",
+					"pip",
+					"install",
+					"-e",
+					"."
+				]
+			},
+			{
+				"label": "pip uninstall: dev package",
+				"type": "shell",
+				"command": "conda",
+				"args": [
+					"run",
+					"--no-capture-output",
+					"-n",
+					"datajoint-lazy-schema",
+					"pip",
+					"uninstall",
+					"-y",
+					"datajoint-lazy-schema"
+				]
+			},
+			{
+				"label": "pip uninstall: dev package and egg",
+				"type": "shell",
+				"command": "find . -name '*.egg-info' -type d -exec rm -rf {} +",
+				"dependsOn": [
+					"pip uninstall: dev package"
+				],
+				"dependsOrder": "sequence",
+				"options": {
+					"cwd": "${workspaceFolder}"
+				}
+			}
+		]
+	}
+}

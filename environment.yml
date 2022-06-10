@@ -1,0 +1,37 @@
+# Initial install:
+#   > mamba env create -qvf environment.yml
+# Update env:
+#   > mamba env update -qvf environment.yml --prune
+# Package install:
+#   > pip install -e .
+# Remove env:
+#   > mamba env remove -n datajoint-lazy-schema
+
+name: datajoint-lazy-schema
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # Core environment dependencies
+  - python==3.10.*
+  - pip>=22.0
+  - cryptography
+  - ipython
+  - matplotlib
+  - minio
+  - networkx
+  - numpy
+  - otumat
+  - pandas
+  - pydot
+  - pymysql
+  - pyparsing
+  - tqdm
+  - urllib3
+  - ipykernel
+  - notebook
+  - black
+  - flake8
+  - mypy
+  - pip:
+      - datajoint>=0.13.5
